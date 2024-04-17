@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# ignore data from exercise 1
+ex1/fma_metadata
+
 # C extensions
 *.so
 
