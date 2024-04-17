@@ -10,15 +10,21 @@ spark_context = SparkContext(appName="FrequentItems")
 spark_session = SparkSession.builder.appName("Example").getOrCreate()
 sql_context = SQLContext(spark_session)
 
-def fetch_data(input_file, percentage=5):
+def fetch_data(input_file, subset='small', percentage=100):
     """Load a specified percentage of the 'conditions.csv.gz' file into a Spark RDD."""
     full_rdd = spark_session.read.option("header", "true").csv(input_file).rdd
-    total_count = full_rdd.count()
-    sample_rdd = full_rdd.sample(False, percentage / 100.0, seed=42)
-    conditions_rdd = sample_rdd
-    print(f"\n\n Loaded {percentage}% of the data ({sample_rdd.count()} out of {total_count} rows)")
-    print(conditions_rdd.take(5))
-    return conditions_rdd
+
+    # Convert RDD to DataFrame
+    full_df = full_rdd.toDF()
+
+    # Filter the DataFrame to get the specified subset
+    filtered_df = full_df.filter(full_df['set32'] == subset)
+    sample_df = filtered_df.sample(False, percentage / 100.0, seed=42)
+    songs_rdd = sample_df.rdd
+
+    print(f"\n\n Loaded data for subset '{subset}' ({sample_df.count()} out of {full_df.count()} songs)")
+    print(songs_rdd.take(5))
+    return songs_rdd
 
 
 if __name__ == '__main__':
@@ -29,7 +35,7 @@ if __name__ == '__main__':
         print("  <output_directory>: The path to the output directory where the results will be saved.")
         exit(1)
 
-    conditions_rdd = fetch_data(sys.argv[1], percentage=6) 
+    songs_rdd = fetch_data(sys.argv[1], "small", percentage=100) 
 
     # Stop the Spark session
     spark_session.stop()
