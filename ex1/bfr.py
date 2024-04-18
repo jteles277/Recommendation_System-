@@ -1,7 +1,7 @@
 from pyspark import SparkContext
 from pyspark.sql import SparkSession, SQLContext
 from sklearn.cluster import KMeans
-from pyspark.ml.clustering import AgglomerativeClustering
+from sklearn.cluster import AgglomerativeClustering
 from pyspark.ml.feature import VectorAssembler
 import sys
 import os
@@ -49,7 +49,7 @@ def run_bfr(songs_rdd, features_rdd):
 
     # Apply agglomerative clustering
     for k in range(8, 17):
-        agglomerative = AgglomerativeClustering(distanceMeasure="euclidean", linkageType="ward", k=k)
+        agglomerative = AgglomerativeClustering(k=k, affinity="euclidean")
         model = agglomerative.fit(song_features)
 
         # Get the cluster labels
