@@ -1,1 +1,1 @@
-spark-submit bfr.py fma_metadata/tracks.csv fma_metadata/features.csv results
+spark-submit bfr.py fma_metadata/tracks.csv fma_metadata/features.csv results 

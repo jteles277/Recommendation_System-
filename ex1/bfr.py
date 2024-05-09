@@ -57,23 +57,19 @@ def find_best_k(features_df):
             centroid = np.mean(song_features[cluster_labels == i], axis=0)
             cluster_points = song_features[cluster_labels == i]
             cluster_radius = max([np.linalg.norm(point - centroid) for point in cluster_points])
-            cluster_distances = pairwise_distances(X, metric='euclidean')
+            # cluster_distances = pairwise_distances(X, metric='euclidean')
             cluster_density = len(cluster_points) / (np.pi * cluster_radius**2)
-            
             radius.append(cluster_radius)
-            diameter.append(cluster_diameter)
+            # diameter.append(cluster_diameter)
             density.append(cluster_density)
 
+        average_density = np.mean(density)
+        if average_density > cluster_density:
+            cluster_density = average_density
+            best_k = k_value 
 
-    print(f"Results for k={k_value}:")
-    print("Radius:", radius)
-    print("Diameter:", diameter)
-    print("Density:", density)
-    plt.plot(k_values, silhouette_scores)
-    plt.xlabel('Number of Clusters')
-    plt.ylabel('Silhouette Score')
-    plt.show()
-    
+    return best_k
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
@@ -85,7 +81,8 @@ if __name__ == '__main__':
 
     features_df = fetch_data(sys.argv[1], sys.argv[2], "small") 
 
-    find_best_k(features_df)
+    best_k = find_best_k(features_df)
+    print(f"\n\n The best k is: {best_k}")
 
     # Stop the Spark session
     spark_session.stop()
