@@ -150,10 +150,10 @@ if __name__ == '__main__':
     with open(times_results_file, "a") as f:
         f.write(f"Execution time: {execution_time:.2f} seconds for file {sys.argv[1]}\n")
     
-    predictions_df = spark.createDataFrame(predictions, ["userId", "movieId", "prediction"])
+    #predictions_df = spark.createDataFrame(predictions, ["userId", "movieId", "prediction"])
 
     # Evaluate the predictions using RMSE
-    evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating", predictionCol="prediction")
-    rmse = evaluator.evaluate(predictions_df)
-    print("Root Mean Squared Error (RMSE) for hidden ratings = " + str(rmse))
+    #evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating", predictionCol="prediction")
+    #rmse = evaluator.evaluate(predictions_df)
+    #print("Root Mean Squared Error (RMSE) for hidden ratings = " + str(rmse))
 
