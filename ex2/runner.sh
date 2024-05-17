@@ -1,0 +1,1 @@
+spark-submit movie_recommender.py dataset/ml-100k/movies.csv dataset/ml-100k/ratings.csv results/ml-100k-results.txt 
